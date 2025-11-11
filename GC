@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+#include<vector>
+using namespace std;
+
+
+bool isSafe(int node,vector<vector<int>> graph, vector<int> color,  int c ,int m, int n){
+    for(int i=0;i<n;i++){
+        if(graph[node][i] && color[i]==c){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool graphCol(int node,vector<vector<int>>graph,vector<int> &color,int m,int n){
+    if(node==n){
+        for(int i=0;i<n;i++){
+            cout<<color[i];
+        }
+        return true;
+    }
+
+    for(int c=1;c<=m;c++){
+        if(isSafe(node,graph,color,c,m,n)){
+            color[node]=c;
+            if(graphCol(node+1,graph,color,m,n)) return true;
+            color[node]=0;
+        }
+    }
+
+    return false;
+
+
+}
+int main(){
+    int m=3;
+    int n=4;
+    vector<int> color(n,0);
+    vector<vector<int>> graph = {
+        {0,1,1,0},
+        {1,0,1,1},
+        {1,1,0,0},
+        {0,1,0,0}
+    };
+    graphCol(0,graph,color,m,n);
+    return 0;
+}
