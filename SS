@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+#include<vector>
+using namespace std;
+void printSubset(vector<int> subset){
+    for(int i=0;i<subset.size();i++){
+        cout<<subset[i]<<" ";
+    }
+    cout<<endl;
+}
+void sumOfSubsets(vector<int> set,vector<int> &subset, int index,int cs,int ts){
+    if(cs==ts){
+        printSubset(subset);
+        return;
+    }
+    if(cs>ts || set.size()<index){
+        return;
+    }
+    subset.push_back(set[index]);
+    sumOfSubsets(set,subset,index+1,cs+set[index],ts);
+
+    subset.pop_back();
+    sumOfSubsets(set,subset,index+1,cs,ts);
+
+    return;
+}
+int main(){
+    vector<int> set={1,2,4,4,5};
+    int ts=5;
+    vector<int> subset;
+    sumOfSubsets(set,subset,0,0,ts);
+    return 0;
+}
