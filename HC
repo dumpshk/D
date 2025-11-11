@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    char ch;
+    int freq;
+    Node *left, *right;
+    Node(char c, int f) {
+        ch = c;
+        freq = f;
+        left = right = NULL;
+    }
+};
+
+struct cmp {
+    bool operator()(Node* a, Node* b) {
+        return a->freq > b->freq;
+    }
+};
+
+void encode(Node* root, string str, unordered_map<char,string> &huff) {
+    if (!root) return;
+    if (!root->left && !root->right) huff[root->ch] = str;
+    encode(root->left, str + "0", huff);
+    encode(root->right, str + "1", huff);
+}
+
+int main() {
+    vector<char> chars = {'A','B','C','D','E','F'};
+    vector<int> freq = {5,9,12,13,16,45};
+    priority_queue<Node*, vector<Node*>, cmp> pq;
+    for (int i = 0; i < chars.size(); i++) pq.push(new Node(chars[i], freq[i]));
+    while (pq.size() > 1) {
+        Node *l = pq.top(); pq.pop();
+        Node *r = pq.top(); pq.pop();
+        Node *n = new Node('$', l->freq + r->freq);
+        n->left = l; n->right = r;
+        pq.push(n);
+    }
+    Node* root = pq.top();
+    unordered_map<char,string> huff;
+    encode(root, "", huff);
+    for (auto p : huff) cout << p.first << " " << p.second << endl;
+    return 0;
+}
